@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>문제 데이터 입력 폼 (Dark UI)</title>
+    <title>JSON 생성 및 다운로드</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #0f172a; /* 심해색 계열의 어두운 배경 */
-            color: #e2e8f0; /* 밝은 회색 글자색 */
+            background-color: #f4f6f9;
             margin: 0;
             padding: 20px;
             display: flex;
@@ -17,158 +16,170 @@
             min-height: 100vh;
         }
         .container {
-            background-color: #1e293b; /* 컨테이너를 배경보다 약간 밝게 처리 */
+            background-color: #ffffff;
             padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             width: 100%;
             max-width: 600px;
-            border: 1px solid #334155;
         }
         h2 {
             margin-top: 0;
-            margin-bottom: 20px;
-            color: #f8fafc;
-            font-size: 1.5rem;
-            border-bottom: 2px solid #334155;
+            color: #333;
+            border-bottom: 2px solid #007bff;
             padding-bottom: 10px;
         }
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         label {
             display: block;
-            margin-bottom: 6px;
-            font-weight: 600;
-            color: #94a3b8;
-            font-size: 0.95rem;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #495057;
         }
-        input[type="text"], textarea {
+        input[type="text"], input[type="number"], select, textarea {
             width: 100%;
             padding: 10px;
-            background-color: #0f172a; /* 입력창 내부를 다시 어둡게 하여 대비감 부여 */
-            border: 1px solid #475569;
-            border-radius: 6px;
-            color: #f1f5f9;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
             box-sizing: border-box;
-            font-family: inherit;
-            font-size: 0.95rem;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-        input[type="text"]:focus, textarea:focus {
-            outline: none;
-            border-color: #3b82f6; /* 포커스 시 푸른빛 하이라이트 */
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+            font-size: 14px;
         }
         textarea {
             resize: vertical;
-            min-height: 100px;
+            height: 80px;
+        }
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
         }
         button {
-            background-color: #3b82f6;
-            color: white;
+            flex: 1;
+            padding: 12px;
+            font-size: 16px;
             border: none;
-            padding: 12px 20px;
-            font-size: 1rem;
-            font-weight: 600;
-            border-radius: 6px;
+            border-radius: 4px;
             cursor: pointer;
-            width: 100%;
             transition: background-color 0.2s;
         }
-        button:hover {
-            background-color: #2563eb;
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
         }
-        .result-box {
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background-color: #545b62;
+        }
+        .preview-box {
             margin-top: 20px;
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
             padding: 15px;
-            border-radius: 6px;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 13px;
+            max-height: 200px;
+            overflow-y: auto;
             display: none;
-            font-size: 0.9rem;
-        }
-        .success {
-            background-color: rgba(6, 78, 59, 0.3);
-            color: #34d399;
-            border: 1px solid rgba(52, 211, 153, 0.4);
-        }
-        .error {
-            background-color: rgba(127, 29, 29, 0.3);
-            color: #f87171;
-            border: 1px solid rgba(248, 113, 113, 0.4);
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>문제 데이터 전송 (Dark Mode)</h2>
-    
-    <form id="problemForm">
+    <h2>JSON 파일 생성기</h2>
+    <form id="jsonForm">
+        <!-- 예시 파라미터 구성 (필요에 따라 이 부분을 수정하세요) -->
         <div class="form-group">
-            <label for="code">문항 코드 (code)</label>
-            <input type="text" id="code" name="code" placeholder="예: 2021.11.44" required>
+            <label for="title">제목 (Title)</label>
+            <input type="text" id="title" name="title" placeholder="제목을 입력하세요" required>
         </div>
-        
+
         <div class="form-group">
-            <label for="passage">지문 (passage)</label>
-            <textarea id="passage" name="passage" placeholder="지문 내용을 입력하세요"></textarea>
+            <label for="version">버전 (Version)</label>
+            <input type="text" id="version" name="version" placeholder="1.0.0" required>
         </div>
-        
+
         <div class="form-group">
-            <label for="problem">발문 및 선택지 (problem)</label>
-            <textarea id="problem" name="problem" placeholder="문제 및 선택지 내용을 입력하세요"></textarea>
+            <label for="author">작성자 (Author)</label>
+            <input type="text" id="author" name="author" placeholder="이름을 입력하세요">
         </div>
-        
+
         <div class="form-group">
-            <label for="thoughts">실전 판단 / 사고 과정 (thoughts)</label>
-            <textarea id="thoughts" name="thoughts" placeholder="본인의 생각이나 애매했던 점을 입력하세요"></textarea>
+            <label for="description">설명 (Description)</label>
+            <textarea id="description" name="description" placeholder="상세 설명을 입력하세요"></textarea>
         </div>
-        
-        <button type="submit">JSON 데이터 전송</button>
+
+        <div class="btn-group">
+            <button type="button" class="btn-secondary" onclick="previewJSON()">미리보기</button>
+            <button type="button" class="btn-primary" onclick="downloadJSON()">JSON 다운로드</button>
+        </div>
     </form>
 
-    <div id="result" class="result-box"></div>
+    <div id="preview" class="preview-box"></div>
 </div>
 
 <script>
-    // 전송 링크 지정을 위한 하나의 전역 변수
-    const TARGET_URL = "https://api.example.com/submit-problem";
+    // 폼 데이터를 객체로 변환하는 함수
+    function generateDataObject() {
+        const title = document.getElementById('title').value;
+        const version = document.getElementById('version').value;
+        const author = document.getElementById('author').value;
+        const description = document.getElementById('description').value;
 
-    document.getElementById('problemForm').addEventListener('submit', function(event) {
-        event.preventDefault();
-        
-        const formData = {
-            code: document.getElementById('code').value,
-            passage: document.getElementById('passage').value,
-            problem: document.getElementById('problem').value,
-            thoughts: document.getElementById('thoughts').value
-        };
-        
-        fetch(TARGET_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
+        // 생성할 JSON 구조 정의
+        return {
+            title: title || "",
+            version: version || "1.0.0",
+            meta: {
+                author: author || "Unknown",
+                createdAt: new Date().toISOString().split('T')[0]
             },
-            body: JSON.stringify(formData)
-        })
-        .then(response => {
-            if (response.ok) {
-                showResult('데이터가 성공적으로 전송되었습니다!', 'success');
-            } else {
-                showResult(`전송 실패 (상태 코드: ${response.status})`, 'error');
-            }
-        })
-        .catch(error => {
-            console.log("전송 시도한 JSON 데이터:", formData);
-            showResult(`전송 시도 완료 (전역 변수 주소로 JSON 전송을 요청했습니다.)<br><br><strong>[확인용 전송 데이터]</strong><br>${JSON.stringify(formData)}`, 'success');
-        });
-    });
+            description: description || ""
+        };
+    }
 
-    function showResult(message, className) {
-        const resultBox = document.getElementById('result');
-        resultBox.innerHTML = message;
-        resultBox.className = `result-box ${className}`;
-        resultBox.style.display = 'block';
+    // 화면에 JSON 미리보기 출력
+    function previewJSON() {
+        const data = generateDataObject();
+        const previewBox = document.getElementById('preview');
+        
+        previewBox.textContent = JSON.stringify(data, null, 4);
+        previewBox.style.display = 'block';
+    }
+
+    // JSON 파일 다운로드 트리거
+    function downloadJSON() {
+        const data = generateDataObject();
+        const jsonString = JSON.stringify(data, null, 4);
+        
+        // Blob 객체 생성
+        const blob = new Blob([jsonString], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        
+        // 다운로드용 링크 생성 및 클릭
+        const link = document.createElement('a');
+        
+        // 파일명 설정 (제목을 활용하거나 기본값 사용)
+        const filename = (data.title ? data.title.replace(/[^a-zA-Z0-9가-힣]/g, "_") : "data") + ".json";
+        
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        
+        // 사용 후 URL 객체 해제 및 요소 제거
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
     }
 </script>
 

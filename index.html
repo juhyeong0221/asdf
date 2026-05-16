@@ -3,31 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JSON 생성 및 다운로드</title>
+    <title>유형별 JSON 생성기</title>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f6f9;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f8f9fa;
             margin: 0;
             padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+            color: #333;
         }
         .container {
-            background-color: #ffffff;
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
             padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 600px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
         h2 {
             margin-top: 0;
-            color: #333;
+            color: #222;
             border-bottom: 2px solid #007bff;
             padding-bottom: 10px;
+        }
+        .type-selector {
+            margin-bottom: 25px;
+            padding: 15px;
+            background-color: #e9ecef;
+            border-radius: 6px;
+        }
+        .type-selector label {
+            font-weight: bold;
+            margin-right: 20px;
+            cursor: pointer;
+        }
+        .form-section {
+            display: none;
+            margin-bottom: 20px;
+        }
+        .form-section.active {
+            display: block;
         }
         .form-group {
             margin-bottom: 15px;
@@ -35,149 +50,256 @@
         label {
             display: block;
             margin-bottom: 5px;
-            font-weight: bold;
+            font-weight: 600;
             color: #495057;
         }
-        input[type="text"], input[type="number"], select, textarea {
+        input[type="text"], textarea {
             width: 100%;
             padding: 10px;
             border: 1px solid #ced4da;
             border-radius: 4px;
             box-sizing: border-box;
-            font-size: 14px;
         }
         textarea {
             resize: vertical;
-            height: 80px;
+            height: 60px;
         }
-        .btn-group {
+        .array-container {
+            background: #f1f3f5;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+        }
+        .array-item {
+            background: #fff;
+            padding: 15px;
+            border-radius: 4px;
+            border: 1px solid #dee2e6;
+            margin-bottom: 10px;
+            position: relative;
+        }
+        .btn-add {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn-add:hover { background-color: #218838; }
+        
+        .btn-remove {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .btn-remove:hover { background-color: #c82333; }
+
+        .action-group {
+            margin-top: 30px;
             display: flex;
             gap: 10px;
-            margin-top: 20px;
         }
-        button {
+        .btn-action {
             flex: 1;
             padding: 12px;
             font-size: 16px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            transition: background-color 0.2s;
+            font-weight: bold;
         }
-        .btn-primary {
-            background-color: #007bff;
-            color: white;
-        }
-        .btn-primary:hover {
-            background-color: #0056b3;
-        }
-        .btn-secondary {
-            background-color: #6c757d;
-            color: white;
-        }
-        .btn-secondary:hover {
-            background-color: #545b62;
-        }
-        .preview-box {
-            margin-top: 20px;
-            background-color: #f8f9fa;
-            border: 1px solid #e9ecef;
+        .btn-preview { background-color: #6c757d; color: white; }
+        .btn-preview:hover { background-color: #5a6268; }
+        .btn-download { background-color: #007bff; color: white; }
+        .btn-download:hover { background-color: #0069d9; }
+
+        pre {
+            background: #272822;
+            color: #f8f8f2;
             padding: 15px;
-            border-radius: 4px;
-            white-space: pre-wrap;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 13px;
-            max-height: 200px;
-            overflow-y: auto;
+            border-radius: 5px;
+            overflow-x: auto;
+            max-height: 300px;
             display: none;
+            font-family: 'Courier New', Courier, monospace;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>JSON 파일 생성기</h2>
-    <form id="jsonForm">
-        <!-- 예시 파라미터 구성 (필요에 따라 이 부분을 수정하세요) -->
+    <h2>유형별 JSON 생성기</h2>
+    
+    <!-- 1. 유형 선택 라디오 버튼 -->
+    <div class="type-selector">
+        <span style="font-weight: bold; margin-right: 15px;">유형 선택:</span>
+        <label><input type="radio" name="schemaType" value="type1" checked onclick="switchType('type1')"> 1유형 (배열 형태)</label>
+        <label><input type="radio" name="schemaType" value="type2" onclick="switchType('type2')"> 2유형 (오브젝트 내 배열)</label>
+    </div>
+
+    <!-- 2. 1유형 입력 폼 -->
+    <div id="type1Section" class="form-section active">
+        <h3>1유형 데이터 구성</h3>
+        <button type="button" class="btn-add" onclick="addItem('type1List')">+ 항목 추가</button>
+        <div id="type1List" class="array-container">
+            <!-- 동적으로 원소가 추가되는 영역 -->
+        </div>
+    </div>
+
+    <!-- 3. 2유형 입력 폼 -->
+    <div id="type2Section" class="form-section">
+        <h3>2유형 데이터 구성</h3>
         <div class="form-group">
-            <label for="title">제목 (Title)</label>
-            <input type="text" id="title" name="title" placeholder="제목을 입력하세요" required>
+            <label for="type2Test">시험명 (test)</label>
+            <input type="text" id="type2Test" placeholder="시험 이름을 입력하세요">
         </div>
-
+        
         <div class="form-group">
-            <label for="version">버전 (Version)</label>
-            <input type="text" id="version" name="version" placeholder="1.0.0" required>
+            <label>질문 목록 (questions 배열)</label>
+            <button type="button" class="btn-add" onclick="addItem('type2List')">+ 문항 추가</button>
+            <div id="type2List" class="array-container">
+                <!-- 동적으로 원소가 추가되는 영역 -->
+            </div>
         </div>
+    </div>
 
-        <div class="form-group">
-            <label for="author">작성자 (Author)</label>
-            <input type="text" id="author" name="author" placeholder="이름을 입력하세요">
-        </div>
+    <!-- 4. 하단 액션 버튼 및 미리보기 -->
+    <div class="action-group">
+        <button type="button" class="btn-action btn-preview" onclick="previewJSON()">미리보기</button>
+        <button type="button" class="btn-action btn-download" onclick="downloadJSON()">JSON 다운로드</button>
+    </div>
 
-        <div class="form-group">
-            <label for="description">설명 (Description)</label>
-            <textarea id="description" name="description" placeholder="상세 설명을 입력하세요"></textarea>
-        </div>
-
-        <div class="btn-group">
-            <button type="button" class="btn-secondary" onclick="previewJSON()">미리보기</button>
-            <button type="button" class="btn-primary" onclick="downloadJSON()">JSON 다운로드</button>
-        </div>
-    </form>
-
-    <div id="preview" class="preview-box"></div>
+    <h4 id="previewTitle" style="display:none; margin-top:25px;">JSON 미리보기</h4>
+    <pre id="jsonPreview"></pre>
 </div>
 
 <script>
-    // 폼 데이터를 객체로 변환하는 함수
-    function generateDataObject() {
-        const title = document.getElementById('title').value;
-        const version = document.getElementById('version').value;
-        const author = document.getElementById('author').value;
-        const description = document.getElementById('description').value;
+    // 페이지 로드 시 각 유형에 기본적으로 하나의 아이템을 추가해 둠
+    window.onload = function() {
+        addItem('type1List');
+        addItem('type2List');
+    };
 
-        // 생성할 JSON 구조 정의
-        return {
-            title: title || "",
-            version: version || "1.0.0",
-            meta: {
-                author: author || "Unknown",
-                createdAt: new Date().toISOString().split('T')[0]
-            },
-            description: description || ""
-        };
+    // 유형 전환 함수
+    function switchType(type) {
+        document.querySelectorAll('.form-section').forEach(el => el.classList.remove('active'));
+        if (type === 'type1') {
+            document.getElementById('type1Section').classList.add('active');
+        } else {
+            document.getElementById('type2Section').classList.add('active');
+        }
     }
 
-    // 화면에 JSON 미리보기 출력
-    function previewJSON() {
-        const data = generateDataObject();
-        const previewBox = document.getElementById('preview');
+    // 배열 내 원소(항목) 동적 추가 함수
+    function addItem(containerId) {
+        const container = document.getElementById(containerId);
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'array-item';
+
+        if (containerId === 'type1List') {
+            itemDiv.innerHTML = `
+                <button type="button" class="btn-remove" onclick="this.parentElement.remove()">삭제</button>
+                <div class="form-group">
+                    <label>시험명 (test)</label>
+                    <input type="text" class="t1-test" placeholder="예: 중간고사">
+                </div>
+                <div class="form-group">
+                    <label>문제 범위 (question_range)</label>
+                    <input type="text" class="t1-range" placeholder="예: 1-10">
+                </div>
+                <div class="form-group">
+                    <label>지문/본문 (passage)</label>
+                    <textarea class="t1-passage" placeholder="본문 내용을 입력하세요"></textarea>
+                </div>
+            `;
+        } else if (containerId === 'type2List') {
+            itemDiv.innerHTML = `
+                <button type="button" class="btn-remove" onclick="this.parentElement.remove()">삭제</button>
+                <div class="form-group">
+                    <label>문항 번호 (number)</label>
+                    <input type="text" class="t2-number" placeholder="예: Q1">
+                </div>
+                <div class="form-group">
+                    <label>지문/문제 (passage)</label>
+                    <textarea class="t2-passage" placeholder="문제 또는 지문을 입력하세요"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>선지/보기 (selections)</label>
+                    <input type="text" class="t2-selections" placeholder="예: ① 사과 ② 배 ③ 포도">
+                </div>
+            `;
+        }
+        container.appendChild(itemDiv);
+    }
+
+    // 입력된 폼 데이터를 기반으로 JSON 객체 생성
+    function buildDataObject() {
+        const selectedType = document.querySelector('input[name="schemaType"]:checked').value;
         
-        previewBox.textContent = JSON.stringify(data, null, 4);
-        previewBox.style.display = 'block';
+        if (selectedType === 'type1') {
+            const data = [];
+            const items = document.querySelectorAll('#type1List .array-item');
+            
+            items.forEach(item => {
+                data.push({
+                    test: item.querySelector('.t1-test').value,
+                    question_range: item.querySelector('.t1-range').value,
+                    passage: item.querySelector('.t1-passage').value
+                });
+            });
+            return data;
+        } else {
+            const testValue = document.getElementById('type2Test').value;
+            const questions = [];
+            const items = document.querySelectorAll('#type2List .array-item');
+            
+            items.forEach(item => {
+                questions.push({
+                    number: item.querySelector('.t2-number').value,
+                    passage: item.querySelector('.t2-passage').value,
+                    selections: item.querySelector('.t2-selections').value
+                });
+            });
+            
+            return {
+                test: testValue,
+                questions: questions
+            };
+        }
     }
 
-    // JSON 파일 다운로드 트리거
+    // 미리보기 기능
+    function previewJSON() {
+        const data = buildDataObject();
+        const previewElement = document.getElementById('jsonPreview');
+        document.getElementById('previewTitle').style.display = 'block';
+        previewElement.textContent = JSON.stringify(data, null, 4);
+        previewElement.style.display = 'block';
+    }
+
+    // 다운로드 기능
     function downloadJSON() {
-        const data = generateDataObject();
+        const data = buildDataObject();
+        const selectedType = document.querySelector('input[name="schemaType"]:checked').value;
         const jsonString = JSON.stringify(data, null, 4);
         
-        // Blob 객체 생성
         const blob = new Blob([jsonString], { type: "application/json" });
         const url = URL.createObjectURL(blob);
         
-        // 다운로드용 링크 생성 및 클릭
         const link = document.createElement('a');
-        
-        // 파일명 설정 (제목을 활용하거나 기본값 사용)
-        const filename = (data.title ? data.title.replace(/[^a-zA-Z0-9가-힣]/g, "_") : "data") + ".json";
-        
         link.href = url;
-        link.download = filename;
+        link.download = `${selectedType}_data.json`;
         document.body.appendChild(link);
         link.click();
         
-        // 사용 후 URL 객체 해제 및 요소 제거
         document.body.removeChild(link);
         URL.revokeObjectURL(url);
     }

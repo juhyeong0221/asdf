@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>유형별 JSON 생성기</title>
+    <title>유형별 JSON 생성기 (최신 항목 위로)</title>
     <style>
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
@@ -142,13 +142,13 @@
     <div class="type-selector">
         <span style="font-weight: bold; margin-right: 15px;">유형 선택:</span>
         <label><input type="radio" name="schemaType" value="type1" checked onclick="switchType('type1')"> 1유형 (배열 형태)</label>
-        <label><input type="radio" name="schemaType" value="type2" onclick="switchType('type2')"> 2유형 (오브젝트 내 배열)</label>
+        <label><input type="radio" name="schemaType" value="type2" onclick="onclick="switchType('type2')"> 2유형 (오브젝트 내 배열)</label>
     </div>
 
     <!-- 2. 1유형 입력 폼 -->
     <div id="type1Section" class="form-section active">
         <h3>1유형 데이터 구성</h3>
-        <button type="button" class="btn-add" onclick="addItem('type1List')">+ 항목 추가</button>
+        <button type="button" class="btn-add" onclick="addItem('type1List')">+ 항목 추가 (맨 위에 추가됨)</button>
         <div id="type1List" class="array-container">
             <!-- 동적으로 원소가 추가되는 영역 -->
         </div>
@@ -164,7 +164,7 @@
         
         <div class="form-group">
             <label>질문 목록 (questions 배열)</label>
-            <button type="button" class="btn-add" onclick="addItem('type2List')">+ 문항 추가</button>
+            <button type="button" class="btn-add" onclick="addItem('type2List')">+ 문항 추가 (맨 위에 추가됨)</button>
             <div id="type2List" class="array-container">
                 <!-- 동적으로 원소가 추가되는 영역 -->
             </div>
@@ -182,7 +182,7 @@
 </div>
 
 <script>
-    // 페이지 로드 시 각 유형에 기본적으로 하나의 아이템을 추가해 둠
+    // 페이지 로드 시 기본적으로 하나의 아이템을 미리 띄워둠
     window.onload = function() {
         addItem('type1List');
         addItem('type2List');
@@ -198,7 +198,7 @@
         }
     }
 
-    // 배열 내 원소(항목) 동적 추가 함수
+    // 배열 내 원소(항목) 동적 추가 함수 (위로 추가되도록 수정)
     function addItem(containerId) {
         const container = document.getElementById(containerId);
         const itemDiv = document.createElement('div');
@@ -237,7 +237,13 @@
                 </div>
             `;
         }
-        container.appendChild(itemDiv);
+
+        // 핵심 변경 부분: appendChild 대신 insertBefore를 사용하여 첫 번째 자식 앞에 삽입
+        if (container.firstChild) {
+            container.insertBefore(itemDiv, container.firstChild);
+        } else {
+            container.appendChild(itemDiv);
+        }
     }
 
     // 입력된 폼 데이터를 기반으로 JSON 객체 생성

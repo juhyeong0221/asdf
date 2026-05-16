@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>유형별 JSON 생성기</title>
+    <title>유형별 JSON 생성기 (정답 기능 추가)</title>
     <style>
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
@@ -139,7 +139,7 @@
 <div class="container">
     <h2>유형별 JSON 생성기</h2>
     
-    <!-- 1. 유형 선택 라디오 버튼 (오타 수정 완료) -->
+    <!-- 1. 유형 선택 라디오 버튼 -->
     <div class="type-selector">
         <span style="font-weight: bold; margin-right: 15px;">유형 선택:</span>
         <label><input type="radio" name="schemaType" value="type1" checked onclick="switchType('type1')"> 1유형 (배열 형태)</label>
@@ -155,7 +155,7 @@
         </div>
     </div>
 
-    <!-- 3. 2유형 입력 폼 -->
+    <!-- 3. 2유형 입력 폼 (정답 항목 연동) -->
     <div id="type2Section" class="form-section">
         <h3>2유형 데이터 구성</h3>
         <div class="form-group">
@@ -183,13 +183,11 @@
 </div>
 
 <script>
-    // 페이지 로드 시 각 유형에 기본적으로 하나의 아이템을 배치
     window.onload = function() {
         addItem('type1List');
         addItem('type2List');
     };
 
-    // 유형 전환 함수
     function switchType(type) {
         document.querySelectorAll('.form-section').forEach(el => el.classList.remove('active'));
         if (type === 'type1') {
@@ -199,7 +197,7 @@
         }
     }
 
-    // 배열 내 원소(항목) 동적 추가 함수 (최상단 추가 방식)
+    // 배열 내 원소 동적 추가 기능 (2유형에 정답 필드 추가)
     function addItem(containerId) {
         const container = document.getElementById(containerId);
         const itemDiv = document.createElement('div');
@@ -236,10 +234,13 @@
                     <label>선지/보기 (selections)</label>
                     <input type="text" class="t2-selections" placeholder="예: ① 사과 ② 배 ③ 포도">
                 </div>
+                <div class="form-group">
+                    <label>정답 (answer)</label>
+                    <input type="text" class="t2-answer" placeholder="예: ① 또는 사과">
+                </div>
             `;
         }
 
-        // 최상단(첫 번째 자식 앞)에 추가하는 로직
         if (container.firstChild) {
             container.insertBefore(itemDiv, container.firstChild);
         } else {
@@ -247,7 +248,7 @@
         }
     }
 
-    // 입력된 폼 데이터를 기반으로 JSON 객체 생성
+    // 입력 데이터 파싱 및 JSON 포맷 구조화
     function buildDataObject() {
         const selectedType = document.querySelector('input[name="schemaType"]:checked').value;
         
@@ -272,7 +273,8 @@
                 questions.push({
                     number: item.querySelector('.t2-number').value,
                     passage: item.querySelector('.t2-passage').value,
-                    selections: item.querySelector('.t2-selections').value
+                    selections: item.querySelector('.t2-selections').value,
+                    answer: item.querySelector('.t2-answer').value // 정답 데이터 바인딩 추가
                 });
             });
             
@@ -283,7 +285,6 @@
         }
     }
 
-    // 미리보기 기능
     function previewJSON() {
         const data = buildDataObject();
         const previewElement = document.getElementById('jsonPreview');
@@ -292,7 +293,6 @@
         previewElement.style.display = 'block';
     }
 
-    // 다운로드 기능
     function downloadJSON() {
         const data = buildDataObject();
         const selectedType = document.querySelector('input[name="schemaType"]:checked').value;

@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>문제 데이터 입력 폼</title>
+    <title>문제 데이터 입력 폼 (Dark UI)</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f5f7fb;
-            color: #333;
+            background-color: #0f172a; /* 심해색 계열의 어두운 배경 */
+            color: #e2e8f0; /* 밝은 회색 글자색 */
             margin: 0;
             padding: 20px;
             display: flex;
@@ -17,19 +17,20 @@
             min-height: 100vh;
         }
         .container {
-            background-color: #ffffff;
+            background-color: #1e293b; /* 컨테이너를 배경보다 약간 밝게 처리 */
             padding: 30px;
             border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
             width: 100%;
             max-width: 600px;
+            border: 1px solid #334155;
         }
         h2 {
             margin-top: 0;
             margin-bottom: 20px;
-            color: #1e293b;
+            color: #f8fafc;
             font-size: 1.5rem;
-            border-bottom: 2px solid #e2e8f0;
+            border-bottom: 2px solid #334155;
             padding-bottom: 10px;
         }
         .form-group {
@@ -39,30 +40,32 @@
             display: block;
             margin-bottom: 6px;
             font-weight: 600;
-            color: #475569;
+            color: #94a3b8;
             font-size: 0.95rem;
         }
         input[type="text"], textarea {
             width: 100%;
             padding: 10px;
-            border: 1px solid #cbd5e1;
+            background-color: #0f172a; /* 입력창 내부를 다시 어둡게 하여 대비감 부여 */
+            border: 1px solid #475569;
             border-radius: 6px;
+            color: #f1f5f9;
             box-sizing: border-box;
             font-family: inherit;
             font-size: 0.95rem;
-            transition: border-color 0.2s;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
-        input[type="text"]:focus, textarea :focus {
+        input[type="text"]:focus, textarea:focus {
             outline: none;
-            border-color: #3b82f6;
-            background-color: #f8fafc;
+            border-color: #3b82f6; /* 포커스 시 푸른빛 하이라이트 */
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
         }
         textarea {
             resize: vertical;
             min-height: 100px;
         }
         button {
-            background-color: #2563eb;
+            background-color: #3b82f6;
             color: white;
             border: none;
             padding: 12px 20px;
@@ -74,7 +77,7 @@
             transition: background-color 0.2s;
         }
         button:hover {
-            background-color: #1d4ed8;
+            background-color: #2563eb;
         }
         .result-box {
             margin-top: 20px;
@@ -84,23 +87,22 @@
             font-size: 0.9rem;
         }
         .success {
-            background-color: #f0fdf4;
-            color: #166534;
-            border: 1px solid #bbf7d0;
+            background-color: rgba(6, 78, 59, 0.3);
+            color: #34d399;
+            border: 1px solid rgba(52, 211, 153, 0.4);
         }
         .error {
-            background-color: #fef2f2;
-            color: #991b1b;
-            border: 1px solid #fecaca;
+            background-color: rgba(127, 29, 29, 0.3);
+            color: #f87171;
+            border: 1px solid rgba(248, 113, 113, 0.4);
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>문제 데이터 전송</h2>
+    <h2>문제 데이터 전송 (Dark Mode)</h2>
     
-    <!-- 1. 하나의 Form 존재 및 파라미터 구성 (code, passage, problem, thoughts) -->
     <form id="problemForm">
         <div class="form-group">
             <label for="code">문항 코드 (code)</label>
@@ -129,15 +131,12 @@
 </div>
 
 <script>
-    // 2. 전송 링크를 지정을 위한 하나의 전역 변수 설정
-    // 실사용 시 데이터를 수신할 API 엔드포인트 URL 주소로 변경하여 사용하시면 됩니다.
+    // 전송 링크 지정을 위한 하나의 전역 변수
     const TARGET_URL = "https://api.example.com/submit-problem";
 
     document.getElementById('problemForm').addEventListener('submit', function(event) {
-        // 기본 submit 동작(페이지 리로드) 방지
         event.preventDefault();
         
-        // Form 내부의 데이터를 Object로 추출
         const formData = {
             code: document.getElementById('code').value,
             passage: document.getElementById('passage').value,
@@ -145,26 +144,21 @@
             thoughts: document.getElementById('thoughts').value
         };
         
-        // 전송 결과를 보여줄 DOM 요소
-        const resultBox = document.getElementById('result');
-        
-        // 2. HTTP 요청 방식을 JSON 포맷으로 설정하여 비동기 전송
         fetch(TARGET_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(formData) // JSON 양식 변환
+            body: JSON.stringify(formData)
         })
         .then(response => {
             if (response.ok) {
-                showResult('데이터가 성공적으로 전송되었습니다! (JSON 양식)', 'success');
+                showResult('데이터가 성공적으로 전송되었습니다!', 'success');
             } else {
                 showResult(`전송 실패 (상태 코드: ${response.status})`, 'error');
             }
         })
         .catch(error => {
-            // 현재 예시 URL(api.example.com) 구조상 로컬 실행 시 block/에러가 날 수 있으므로 콘솔 출력과 함께 전송 데이터 확인 처리
             console.log("전송 시도한 JSON 데이터:", formData);
             showResult(`전송 시도 완료 (전역 변수 주소로 JSON 전송을 요청했습니다.)<br><br><strong>[확인용 전송 데이터]</strong><br>${JSON.stringify(formData)}`, 'success');
         });

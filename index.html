@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>유형별 JSON 생성기 (최신 항목 위로)</title>
+    <title>유형별 JSON 생성기</title>
     <style>
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
@@ -69,6 +69,7 @@
             padding: 15px;
             border-radius: 6px;
             margin-top: 15px;
+            min-height: 50px;
         }
         .array-item {
             background: #fff;
@@ -138,11 +139,11 @@
 <div class="container">
     <h2>유형별 JSON 생성기</h2>
     
-    <!-- 1. 유형 선택 라디오 버튼 -->
+    <!-- 1. 유형 선택 라디오 버튼 (오타 수정 완료) -->
     <div class="type-selector">
         <span style="font-weight: bold; margin-right: 15px;">유형 선택:</span>
         <label><input type="radio" name="schemaType" value="type1" checked onclick="switchType('type1')"> 1유형 (배열 형태)</label>
-        <label><input type="radio" name="schemaType" value="type2" onclick="onclick="switchType('type2')"> 2유형 (오브젝트 내 배열)</label>
+        <label><input type="radio" name="schemaType" value="type2" onclick="switchType('type2')"> 2유형 (오브젝트 내 배열)</label>
     </div>
 
     <!-- 2. 1유형 입력 폼 -->
@@ -182,7 +183,7 @@
 </div>
 
 <script>
-    // 페이지 로드 시 기본적으로 하나의 아이템을 미리 띄워둠
+    // 페이지 로드 시 각 유형에 기본적으로 하나의 아이템을 배치
     window.onload = function() {
         addItem('type1List');
         addItem('type2List');
@@ -198,7 +199,7 @@
         }
     }
 
-    // 배열 내 원소(항목) 동적 추가 함수 (위로 추가되도록 수정)
+    // 배열 내 원소(항목) 동적 추가 함수 (최상단 추가 방식)
     function addItem(containerId) {
         const container = document.getElementById(containerId);
         const itemDiv = document.createElement('div');
@@ -238,7 +239,7 @@
             `;
         }
 
-        // 핵심 변경 부분: appendChild 대신 insertBefore를 사용하여 첫 번째 자식 앞에 삽입
+        // 최상단(첫 번째 자식 앞)에 추가하는 로직
         if (container.firstChild) {
             container.insertBefore(itemDiv, container.firstChild);
         } else {

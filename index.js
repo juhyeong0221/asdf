@@ -14,6 +14,7 @@ function moveHandler(e) {
     dy: ${e.beta}
     dz: ${e.gamma}
     `
+    console.log(e);
 }
 
 onStart();

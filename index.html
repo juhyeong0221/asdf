@@ -4,13 +4,17 @@
         <title>Test Board</title>
         <script src="./index.js"></script>
         <script>
-            function onStart() {
-                if (DeviceOrientationEvent.requestPermission){ DeviceOrientationEvent.requestPermission(); }
-                window.addEventListener(
-                    "deviceorientation",
-                    moveHandler,
-                    true
-                );
+            async function onStart() {
+                if (DeviceOrientationEvent.requestPermission){
+                    const perm = await DeviceOrientationEvent.requestPermission();
+                    if (permission === "granted") {
+                        window.addEventListener(
+                            "deviceorientation",
+                            moveHandler,
+                            true
+                        );
+                    }
+                }
             }
 
             function moveHandler(e) {

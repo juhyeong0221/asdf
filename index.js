@@ -15,3 +15,5 @@ function moveHandler(e) {
     dz: ${e.gamma}
     `
 }
+
+onStart();

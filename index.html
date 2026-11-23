@@ -28,7 +28,9 @@
                 console.log(e);
             }
 
-            onStart();
+            document.onload = () => {
+                onStart();
+            };
         </script>
     </head>
     <body>

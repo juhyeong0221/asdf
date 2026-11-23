@@ -1,4 +1,5 @@
 function onStart() {
+    if (DeviceOrientationEvent.requestPermission){ DeviceOrientationEvent.requestPermission(); }
     window.addEventListener(
         "deviceorientation",
         moveHandler,

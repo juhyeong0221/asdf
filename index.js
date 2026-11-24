@@ -5,8 +5,11 @@ function round(n, i=1/*decimals*/) {
 
 async function load() {
     if (DeviceOrientationEvent && DeviceMotionEvent) {
-        window.addEventListener("devicemotion", deviceMotionHandler, true);
-        window.addEventListener("deviceorientation", deviceOrientationHandler, true);
+        DeviceOrientationEvent.requestPermission()
+        .then(() => {
+            window.addEventListener("devicemotion", deviceMotionHandler, true);
+            window.addEventListener("deviceorientation", deviceOrientationHandler, true);
+        });
     }
     
     let d = 0;

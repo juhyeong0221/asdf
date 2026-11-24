@@ -49,7 +49,7 @@ class Vector3D {
 
 async function load() {    
     let d = 0;
-    let p = new Vector3D(0, 0, 1);
+    let p = new Vector3D(0, 0, 100);
     function deviceMotionHandler(e) {
         const v = {
             x: round(e.acceleration.x, d),
@@ -76,9 +76,9 @@ async function load() {
             ry: ${v.ry}
             rz: ${v.rz}
 
-            stdX: ${round(p.x, 1)}
-            stdY: ${round(p.y, 1)}
-            stdZ: ${round(p.z, 1)}
+            stdX: ${round(p.x, 0)}
+            stdY: ${round(p.y, 0)}
+            stdZ: ${round(p.z, 0)}
         `;
     }
     if (DeviceOrientationEvent && DeviceMotionEvent) {

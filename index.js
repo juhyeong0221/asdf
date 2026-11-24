@@ -49,7 +49,7 @@ class Vector3D {
 
 async function load() {    
     let d = 0;
-    let v = new Vector3D(1, 0, 0);
+    let p = new Vector3D(0, 0, 1);
     function deviceMotionHandler(e) {
         const v = {
             x: round(e.acceleration.x, d),
@@ -69,16 +69,16 @@ async function load() {
             ry: round(e.gamma, d),
             rz: round(e.alpha, d)
         };
-        v.rotate(toRad(v.rx), toRad(v.ry), toRad(v.rz));
+        p.rotate(toRad(v.rx), toRad(v.ry), toRad(v.rz));
         const r = document.getElementById("r");
         r.innerText = `
             rx: ${v.rx}
             ry: ${v.ry}
             rz: ${v.rz}
 
-            stdX: ${round(v.x, d)}
-            stdY: ${round(v.y, d)}
-            stdZ: ${round(v.z, d)}
+            stdX: ${round(p.x, d)}
+            stdY: ${round(p.y, d)}
+            stdZ: ${round(p.z, d)}
         `;
     }
     if (DeviceOrientationEvent && DeviceMotionEvent) {

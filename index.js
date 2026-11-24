@@ -37,10 +37,6 @@ async function onStart() {
             rx: ${i.rx}
             ry: ${i.ry}
             rz: ${i.rz}
-
-            stdx: ${window.std.rx}
-            stdy: ${window.std.ry}
-            stdz: ${window.std.rz}
         `
     }
 

@@ -11,14 +11,18 @@ async function onStart() {
         }
     }
 
+    function round(i) {
+        return Math.round(i * 100) / 100;
+    }
+
     function moveHandler(e) {
         const t = document.getElementById("infos"),
         i = {
-            rx: e.beta,
-            ry: e.gamma,
-            rz: e.alpha
+            rx: round(e.beta),
+            ry: round(e.gamma),
+            rz: round(e.alpha)
         };
-        
+
         t.innerText = `
             rx: ${i.rx}
             ry: ${i.ry}

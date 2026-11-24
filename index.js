@@ -1,48 +1,46 @@
-async function onStart() {
-    if (DeviceOrientationEvent.requestPermission){
-        const perm = await DeviceOrientationEvent.requestPermission();
-            if (perm === "granted") {
-                window.addEventListener(
-                    "deviceorientation",
-                    moveHandler,
-                    true
-                );
-            }
-        }
-    }
+/* 0: 정수 반올림, 소수 i번째 자리까지 반올림*/
+function round(n, i=1/*decimals*/) {
+    return Math.round(n * Math.pow(10, i)) / Math.pow(10, i);
+}
 
-    /* 0: 정수 반올림, 소수 i번째 자리까지 반올림*/
-    function round(n, i=1/*decimals*/) {
-        return Math.round(n * Math.pow(10, i)) / Math.pow(10, i);
+async function load() {
+    if (DeviceOrientationEvent && DeviceMotionEvent) {
+        window.addEventListener("devicemotion", deviceMotionHandler, true);
+        window.addEventListener("deviceorientation", deviceOrientationHandler, true);
     }
-
-    function moveHandler(e) {
-        const d = 0;
-        const t = document.getElementById("infos"),
-        i = {
+    
+    let d = 0;
+    function deviceMotionHandler(e) {
+        const v = {
+            x: round(e.acceleration.x, d),
+            y: round(e.acceleration.y, d),
+            z: round(e.acceleration.z, d)
+        };
+        const m = document.getElementById("m");
+        m.innerText = `
+            x: ${v.x}
+            y: ${v.y}
+            z: ${v.z}
+        `;
+    }
+    function deviceOrientationHandler(e) {
+        const v = {
             rx: round(e.beta, d),
             ry: round(e.gamma, d),
             rz: round(e.alpha, d)
         };
-
-        if (i.rx < 45) {
-            t.innerText = `
-            정면을 바라보세요!
-            rx: ${i.rx}
-            ry: ${i.ry}
-            rz: ${i.rz}`
-        } else {
-            t.innerText = `
-                rx: ${i.rx}
-                ry: ${i.ry}
-                rz: ${i.rz}
-            `
-        }
+        const r = document.getElementById("r");
+        r.innerText = `
+            rx: ${v.rx}
+            ry: ${v.ry}
+            rz: ${v.rz}
+        `;
     }
+}
 
-    document.addEventListener("DOMContentLoaded", () => {
-        const btn = document.getElementById("btn1");
-        btn.addEventListener("click", () => {
-        onStart();
+document.addEventListener("DOMContentLoaded", () => {
+    const btn = document.getElementById("btn1");
+    btn.addEventListener("click", () => {
+        load()
     });
 });

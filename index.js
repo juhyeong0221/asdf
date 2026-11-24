@@ -4,7 +4,7 @@ function round(n, i=1/*decimals*/) {
 }
 
 async function load() {    
-    let d = 0;
+    let d = 2;
     function deviceMotionHandler(e) {
         const v = {
             x: round(e.acceleration.x, d),

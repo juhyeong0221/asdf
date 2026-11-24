@@ -3,8 +3,24 @@ function round(n, i=1/*decimals*/) {
     return Math.round(n * Math.pow(10, i)) / Math.pow(10, i);
 }
 
+class Vector3D {
+    constructor(x=0, y=0, z=0) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.scale = Math.sqrt(x*x + y*y + z*z);
+    }
+    rotate(dx, dy, dz) {
+        /*축이 진행하는 방향으로 축을 바라볼 때 시계방향이 +*/
+        /*축을 기준으로 회전한 정도를 작성*/
+        let a, b, c
+
+    }
+
+}
+
 async function load() {    
-    let d = 2;
+    let d = 0;
     function deviceMotionHandler(e) {
         const v = {
             x: round(e.acceleration.x, d),

@@ -49,7 +49,6 @@ class Vector3D {
 
 async function load() {    
     let d = 0;
-    let p = new Vector3D(0, 0, 100);
     function deviceMotionHandler(e) {
         const v = {
             x: round(e.acceleration.x, d),
@@ -69,6 +68,7 @@ async function load() {
             ry: round(e.gamma, d),
             rz: round(e.alpha, d)
         };
+        let p = new Vector3D(0, 0, 100);
         p.rotate(toRad(v.rx), toRad(v.ry), toRad(v.rz));
         const r = document.getElementById("r");
         r.innerText = `

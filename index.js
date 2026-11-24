@@ -12,14 +12,18 @@ async function onStart() {
     }
 
     function moveHandler(e) {
-        const t = document.getElementById("infos");
+        const t = document.getElementById("infos"),
+        i = {
+            rx: e.beta,
+            ry: e.gamma,
+            rz: e.alpha
+        };
+        
         t.innerText = `
-            abs: ${e.absolute}
-            dx: ${e.alpha}
-            dy: ${e.beta}
-           dz: ${e.gamma}
+            rx: ${i.rx}
+            ry: ${i.ry}
+            rz: ${i.rz}
         `
-        console.log(e);
     }
 
     document.addEventListener("DOMContentLoaded", () => {

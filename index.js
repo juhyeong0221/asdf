@@ -1,5 +1,10 @@
 async function onStart() {
     if (DeviceOrientationEvent.requestPermission){
+        window.std = {
+            rx: null,
+            ry: null,
+            rz: null
+        };
         const perm = await DeviceOrientationEvent.requestPermission();
             if (perm === "granted") {
                 window.addEventListener(
@@ -23,11 +28,18 @@ async function onStart() {
             ry: round(e.gamma, 2),
             rz: round(e.alpha, 2)
         };
+        if (window.std.rx === null && window.std.ry === null && window.std.rz === null) {
+            window.std = i;
+        }
 
         t.innerText = `
             rx: ${i.rx}
             ry: ${i.ry}
             rz: ${i.rz}
+
+            stdx: ${window.std.rx}
+            stdy: ${window.std.ry}
+            stdz: ${window.std.rz}
         `
     }
 

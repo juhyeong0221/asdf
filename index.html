@@ -28,10 +28,12 @@
                 console.log(e);
             }
 
-            const btn = document.getElementById("btn1");
-            btn.addEventListener("click", () => {
-                alert("!");
-                onStart();
+            document.addEventListener("onload", () => {
+                const btn = document.getElementById("btn1");
+                btn.addEventListener("click", () => {
+                    alert("!");
+                    onStart();
+                });
             });
         </script>
     </head>

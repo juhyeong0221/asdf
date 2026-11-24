@@ -22,11 +22,12 @@ async function onStart() {
     }
 
     function moveHandler(e) {
+        const d = 0;
         const t = document.getElementById("infos"),
         i = {
-            rx: round(e.beta, 2),
-            ry: round(e.gamma, 2),
-            rz: round(e.alpha, 2)
+            rx: round(e.beta, d),
+            ry: round(e.gamma, d),
+            rz: round(e.alpha, d)
         };
         if (window.std.rx === null && window.std.ry === null && window.std.rz === null) {
             window.std = i;

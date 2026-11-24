@@ -76,9 +76,9 @@ async function load() {
             ry: ${v.ry}
             rz: ${v.rz}
 
-            stdX: ${round(p.x, d)}
-            stdY: ${round(p.y, d)}
-            stdZ: ${round(p.z, d)}
+            stdX: ${round(p.x, 4)}
+            stdY: ${round(p.y, 4)}
+            stdZ: ${round(p.z, 4)}
         `;
     }
     if (DeviceOrientationEvent && DeviceMotionEvent) {

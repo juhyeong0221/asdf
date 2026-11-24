@@ -3,15 +3,7 @@ function round(n, i=1/*decimals*/) {
     return Math.round(n * Math.pow(10, i)) / Math.pow(10, i);
 }
 
-async function load() {
-    if (DeviceOrientationEvent && DeviceMotionEvent) {
-        DeviceOrientationEvent.requestPermission()
-        .then(() => {
-            window.addEventListener("devicemotion", deviceMotionHandler, true);
-            window.addEventListener("deviceorientation", deviceOrientationHandler, true);
-        });
-    }
-    
+async function load() {    
     let d = 0;
     function deviceMotionHandler(e) {
         const v = {
@@ -38,6 +30,13 @@ async function load() {
             ry: ${v.ry}
             rz: ${v.rz}
         `;
+    }
+    if (DeviceOrientationEvent && DeviceMotionEvent) {
+        DeviceOrientationEvent.requestPermission()
+        .then(() => {
+            window.addEventListener("devicemotion", deviceMotionHandler, true);
+            window.addEventListener("deviceorientation", deviceOrientationHandler, true);
+        });
     }
 }
 

@@ -1,10 +1,5 @@
 async function onStart() {
     if (DeviceOrientationEvent.requestPermission){
-        window.std = {
-            rx: null,
-            ry: null,
-            rz: null
-        };
         const perm = await DeviceOrientationEvent.requestPermission();
             if (perm === "granted") {
                 window.addEventListener(
@@ -29,15 +24,20 @@ async function onStart() {
             ry: round(e.gamma, d),
             rz: round(e.alpha, d)
         };
-        if (window.std.rx === null && window.std.ry === null && window.std.rz === null) {
-            window.std = i;
-        }
 
-        t.innerText = `
+        if (i.rx < 45) {
+            t.innerText = `
+            정면을 바라보세요!
             rx: ${i.rx}
             ry: ${i.ry}
-            rz: ${i.rz}
-        `
+            rz: ${i.rz}`
+        } else {
+            t.innerText = `
+                rx: ${i.rx}
+                ry: ${i.ry}
+                rz: ${i.rz}
+            `
+        }
     }
 
     document.addEventListener("DOMContentLoaded", () => {

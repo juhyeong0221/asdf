@@ -11,16 +11,17 @@ async function onStart() {
         }
     }
 
-    function round(i) {
-        return Math.round(i * 100) / 100;
+    /* 0: 정수 반올림, 소수 i번째 자리까지 반올림*/
+    function round(n, i=1/*decimals*/) {
+        return Math.round(n * Math.pow(10, i)) / Math.pow(10, i);
     }
 
     function moveHandler(e) {
         const t = document.getElementById("infos"),
         i = {
-            rx: round(e.beta),
-            ry: round(e.gamma),
-            rz: round(e.alpha)
+            rx: round(e.beta, 2),
+            ry: round(e.gamma, 2),
+            rz: round(e.alpha, 2)
         };
 
         t.innerText = `
